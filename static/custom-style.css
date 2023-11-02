@@ -1,0 +1,41 @@
+main {
+    margin: auto;
+    margin-top: 20px;
+}
+
+.div-bordered {
+    border: 1px solid teal;
+    border-radius: 5px;
+    padding: 10px;
+}
+.dropdown-menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: #5b5c55;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+}
+body{
+	background: #84953E;
+        height: 100vh;
+        justify-content: center;
+        align-items: center;
+	
+}
+
+label.error{
+    color: red
+}
+
+#navbarSupportedContent{
+    flex-grow: 0;
+}
+
+#user-icon{
+    width: 25px;
+    height: 25px;
+    min-width: 0;
+}
+

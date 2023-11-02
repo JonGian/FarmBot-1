@@ -1,0 +1,95 @@
+{% extends 'layout-nomenu.html' %}
+
+{%block content%}
+<head>
+    <meta charset="utf-8">
+    <!-- Fontawesome cdn Link-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        .container {
+            min-width:700px;
+            background: #fff;
+            padding: 50px;
+            border-radius: 5px;
+        }
+        #image {
+            margin: auto;
+        }
+        img {
+            min-width: 400px;
+            width: 80%;
+            height: auto;
+        }
+        #login {
+            display: flex;
+            align-content:center;
+            
+        }
+        button {
+            background: linear-gradient(135deg, #20bf55, #01baef);
+        }
+        button:hover {
+                background: linear-gradient(-135deg, #20bf55, #01baef);
+        }
+    </style>
+</head>
+<main class="container">
+    <div class="row d-flex ">
+        <div class="col-sm-8" id="image">
+            <img src="{{url_for('static', filename='login-img.jpg')}}">
+        </div>
+        <div class="col-md-4 d-flex align-items-center">
+            <form id="submitForm" method="post">
+                <div class="mb-3 text-center">
+                    <h1>Sign In</h1>
+                </div>
+                <div class="mb-3">
+                    <p>Email address</p>
+                    <input type="email" class="form-control" id="email" name="email">
+                </div>                                    
+                <div class="mb-3">
+                    <p>Password</p>
+                    <input type="password" class="form-control" id="password" name="password">
+                </div>
+                <div class="mb-3 text-center">
+                    <button type="submit" class="btn btn-primary">SIGN IN</button>
+                </div>
+                <div class="mb-3 text-center">
+                    <a button type="submit" class="btn btn-primary" href="register">SIGN UP</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    <script type="text/javascript" src="{{url_for("static", filename="login.js")}}"></script>
+
+    <script>
+        var error = JSON.parse('{{error | tojson}}');
+        text = ""
+
+        switch (error) {
+            case -1:
+                text = "Form not submitted correctly.";
+
+            case -2:
+                text = "Cannot connect to FarmBot Web App!";
+
+            case -3:
+                text = "Farmbot Email or Password is incorrect!";
+
+            case -4:
+                text = "Farmbot Extension account does not exist!";
+        }
+
+        if (error != 0) {
+            toastr.error(text);
+        }
+    </script>
+</main>
+
+{%endblock content%}

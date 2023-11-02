@@ -1,0 +1,147 @@
+{% extends 'layout.html' %} {% block content %}
+
+<head>
+  <title>Users</title>
+
+  <style>
+    .menu {
+      background: #d0c4c6;
+      width: 100%;
+      height: auto;
+      padding-left: 20px;
+    }
+
+    #users {
+      font-family: Arial, Helvetica, sans-serif;
+      border-collapse: collapse;
+      width: 80%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    #users tr:nth-child(even) {
+      background-color: #f2f2f2d3;
+    }
+
+    th,
+    td {
+      border-radius: 10px;
+    }
+
+    #users td,
+    th {
+      padding: 8px;
+      text-align: center;
+      background-color: white;
+    }
+  </style>
+
+  <!-- JQuery Library -->
+  <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+  <div class="menu text-left">
+    <h1>USER DATA</h1>
+  </div>
+
+  <div class="container-fluid bg-2 text-center">
+    <table id="users">
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Token Expire Date</th>
+        {% if admin != 1 %}
+        <th>Privilege</th>
+        {% else %}
+        <th>Admin</th>
+        <th>Promote/Demote</th>
+        <th>Delete</th>
+        {% endif %}
+      </tr>
+
+      {% for item in value %}
+      <tr>
+        <td class="nr">{{item[1]}}</td>
+        <td>{{item[0]}}</td>
+        <td>{{item[5]}}</td>
+        {% if admin != 1 %}
+        <td>General</td>
+        {% else %}
+        <td>{{item[2]}}</td>
+        {% if item[2] == '0' %}
+        <td>
+          <input type="submit" id="btnPromote" value="Promote" /> {% else %}
+        </td>
+
+        <td>
+          <input type="submit" id="btnPromote" value="Demote" /> {% endif %}
+        </td>
+
+        <td>
+          <input type="submit" id="btnDelete" value="Delete" />
+          {% endif %}
+        </td>
+      </tr>
+
+      {% endfor %}
+    </table>
+  </div>
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      $("td > input").click(function () {
+        var user = $(this).parent().parent().children()[1].innerHTML;
+        if ($(this).attr("id") == "btnPromote") {
+          if (confirm("Confirm Changing the privilege of: " + user)) {
+            var newForm = $("<form>", {
+              target: "_self",
+              method: "POST",
+            })
+              .append(
+                $("<input>", {
+                  name: "user",
+                  value: user,
+                  type: "hidden",
+                })
+              )
+              .append(
+                $("<input>", {
+                  name: "action",
+                  value: "promote",
+                  type: "hidden",
+                })
+              );
+            $(document.body).append(newForm);
+            newForm.submit();
+          }
+        } else if ($(this).attr("id") == "btnDelete") {
+          if (confirm("Confirm Deleting: " + user)) {
+            var newForm = $("<form>", {
+              target: "_self",
+              method: "POST",
+            })
+              .append(
+                $("<input>", {
+                  name: "user",
+                  value: user,
+                  type: "hidden",
+                })
+              )
+              .append(
+                $("<input>", {
+                  name: "action",
+                  value: "delete",
+                  type: "hidden",
+                })
+              );
+            $(document.body).append(newForm);
+            newForm.submit();
+          }
+        }
+      });
+    });
+  </script>
+</body>
+
+{% endblock content %}

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+
+    <title>{{title}}</title>
+
+    <!-- Bootstrap 5 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+
+    <!-- Bootstrap Font & Icon CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+
+    <!--Custom CSS -->
+    <link rel="stylesheet" href="{{url_for('static', filename='custom-style.css')}}">
+
+    <!-- Toastr CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+</head>
+<body>
+    <!-- JQuery 3.6 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <!-- JQuery Validator -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.3/dist/jquery.validate.min.js"></script>
+
+    <!-- Toastr -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    <!-- Bootstrap 5 JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
+
+    <header>
+        <nav class="navbar navbar-dark bg-dark">
+            <div class="container-fluid">
+                <div>
+                    <a class="navbar-brand">Farmbot Art Extension</a>
+                </div>
+                
+                <div class="dropdown d-flex dropleft">
+                    <a href="#" class="d-block link-dark text-decoration-none" id="dropdownUser1" style="padding: 0;" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img id="user-icon" src="{{url_for('static', filename='user-icon.png')}}" alt="Logged-in User" width="25" height="25" class="rounded-circle">
+                    </a>
+                    <ul class="dropdown-menu text-small" style="right: 0; left: auto" aria-labelledby="dropdownUser1">
+                        <li><a class="dropdown-item" id="menu-item-sign-out" href="logout">Sign out</a></li>
+                    </ul>
+                </div>
+
+            </div>
+        </nav>
+    </header>
+
+    {%block content%}
+    <!--Sign-in/Sign-up HTML Pages will be dynamically rendered here-->
+    {%endblock content%}
+</body>
+</html>

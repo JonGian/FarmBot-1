@@ -1,0 +1,131 @@
+{% extends 'layout-nomenu.html' %}
+
+{%block content%}
+<head>
+    <title>Sign Up </title>
+    <style>
+        * {
+            margin:0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins',sans-serif;
+        }
+        .container {
+            max-width:700px;
+            width: 50%;
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 50px;
+            justify-content: center;
+        }
+         h1{
+             font-size: 25px;
+             font-weight:500;
+             position: relative;             
+         }
+         .container form .user-details{
+             display: flex;
+             flex-wrap: wrap;
+             justify-content: space-between;
+         }
+         form .user-details .input-box{
+             width: calc(100% / 2 - 20px);
+         }
+         .user-details .input-box input{
+             height:45px;
+             width: 100%;
+             margin-bottom: 15px;
+         }
+         form .button{
+             height: 45px;
+             margin: 45px 0;
+         }
+         form .button input {
+             height: 100%;
+             width: 100%;
+             outline: none;
+             color: white;
+             border: none;
+             background: linear-gradient(135deg, #20bf55, #01baef);
+             border-radius: 5px;
+         }
+         @media (max-width: 584px){
+             .container{
+                 max-width: 100%;
+             }
+         }
+        form .button input:hover {
+            background: linear-gradient(-135deg, #20bf55, #01baef);
+        }
+
+    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+    <div class="container">
+        <h1> Sign Up</h1>
+        <form id="submitForm" method="POST">
+            <div class="user-details">
+                <div class="input-box">
+                    <span class="details">Farmbot Email *</span>
+                    <input name="email" id="email" type="text" placeholder="Enter your Farmbot Email" title="Invalid Email fomat" required>
+                </div>
+                <div class="input-box">
+                    <span class="details">Suburb, State*</span>
+                    <input name="location" id="location" type="text" placeholder="Enter your location" required>
+                </div>
+                <div class="input-box">
+                    <span class="details">Farmbot Password*</span>
+                    <input name="password" id="password" type="password" placeholder="Enter your Farmbot password" required>
+                </div>
+                <div class="input-box">
+                    <span class="details">Confirm Password*</span>
+                    <input name="passwordconf" id="passwordconf" type="password" placeholder="Confirm your Farmbot password" required>
+                </div>
+            </div>
+
+            <div class="button text-center">
+                <input id="submitButton" type="submit" value="Register">
+            </div>
+
+            <div class="text-center">
+                <label>Already on Farmbot Art Extension? <a href="/">Sign In</a></label>
+            </div>
+        </form>
+    </div>
+
+    <script type="text/javascript" src="{{url_for("static", filename="register.js")}}"></script>
+
+    <!-- Handles Error's from Backend -->
+    <script>
+        var error = JSON.parse('{{error | tojson }}')
+
+        text = ""
+
+        switch (error) {
+            case -1:
+                text = "Form not submitted correctly!";
+                break;
+            case -2:
+                text = "Cannot connect to Farmbot Web App!";
+                break;
+            case -3:
+                text = "Farmbot Account does not exist!";
+                break;
+            case -4:
+                text = "Farmbot Extension account already exists!"
+                break;
+            case -5:
+                text = "Invalid Location!"
+                break;
+        }
+
+        if (error != 0) {
+            toastr.error(text);
+        }
+    </script>
+
+</body>
+{%endblock content%}

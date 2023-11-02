@@ -1,0 +1,229 @@
+{% extends 'layout.html' %} {% block content %}
+
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Art Entries</title>
+  <style>
+    .menu {
+      background: #d0c4c6;
+      width: 100%;
+      height: auto;
+      padding-left: 20px;
+    }
+
+    table {
+      font-family: Arial, Helvetica, sans-serif;
+      border-collapse: collapse;
+      margin-left: auto;
+      margin-right: auto;
+      width: 80%;
+      margin-bottom: 20px;
+    }
+
+    th {
+      background-color: #d0c4c6;
+      color: black;
+    }
+
+    td,
+    th {
+      height: auto;
+      width: auto;
+      text-align: center;
+      padding: 8px;
+      border-radius: 10px;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    tr:nth-child(odd) {
+      background-color: #ffffff;
+    }
+
+    .row {
+      margin-left: auto;
+      margin-right: auto;
+      width: 50%;
+      margin-bottom: 20px;
+      align-self: center;
+      justify-self: auto;
+      display: inline-flexbox;
+    }
+
+    .card {
+      margin-left: auto;
+      margin-right: auto;
+      width: 100%;
+      margin-bottom: 20px;
+      align-self: center;
+      justify-self: auto;
+      display: block;
+    }
+
+    .btn-primary {
+      background-color: #d0c4c6;
+      border: none;
+      padding: 15px 32px;
+      text-align: center;
+      color: black;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      cursor: pointer;
+    }
+
+    .btn-primary:hover {
+      background-color: #303824;
+      color: white;
+    }
+
+    td img {
+      width: 100%;
+      height: auto;
+    }
+
+    #form {
+      padding: 10em;
+    }
+
+    #formBack {
+      padding: 10em;
+      background-color: white;
+      outline: 2px;
+      outline-color: #d0c4c6;
+      border: groove;
+      border-radius: 4em;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 12px 20px;
+      margin: 8px 0;
+      box-sizing: border-box;
+    }
+
+		#center-text {
+			text-align: center;
+		}
+  </style>
+</head>
+
+<body>
+  <div class="menu text-left">
+    <h1>ART ENTRIES</h1>
+  </div>
+  <main>
+    {% if view_art %}
+    <form class="row gx-3 gy-2 align-items-center" name="form1" method="post">
+      <table>
+        <tr>
+          <th>ID</th>
+          <th>Date Created</th>
+          <th>Full Prompt</th>
+          <th>Positive Prompt</th>
+          <th>Negative Prompt</th>
+          <th>Data Types</th>
+          <th>Plant Report Entry ID</th>
+          <th>Image</th>
+        </tr>
+        <tr>
+          <td>{{ view_art }}</td>
+          <td>{{ entries[3] }}</td>
+          <td>{{ entries[1] }}</td>
+          <td>{{ entries[5] }}</td>
+          <td>{{ entries[6] }}</td>
+          <td>{{ entries[4] }}</td>
+          <td>{{ pEntries }}</td>
+          <td><img src="{{ entries[2] }}"></td>
+        </tr>
+      </table>
+
+      {% else %}
+			<div id="center-text">
+				<strong>
+					<p>
+						Filter by Data Types:
+					</p>
+				</strong>
+			</div>
+      <form class="row gx-3 gy-2 align-items-center" name="arts" method="POST">
+        <table id="data_options">
+          <tr>
+            <th>Date & Time</th>
+            <th>Species</th>
+            <th>RGB</th>
+            <th>Leaf Area</th>
+            <th>Weather Condition</th>
+            <th>Temperature</th>
+            <th>Leaf Count</th>
+            <th>Leaf Circularity</th>
+            <th>Leaf Solidarity</th>
+            <th>Leaf Aspect Ratio</th>
+          </tr>
+          <tr>
+            <td><input type="checkbox" {% if not selectedtypes or "datetime" in selectedtypes %}checked{% endif %}
+                name="selectedTypes[]" value="datetime"></td>
+            <td><input type="checkbox" {% if not selectedtypes or "species" in selectedtypes %}checked{% endif %}
+                name="selectedTypes[]" value="species"></td>
+            <td><input type="checkbox" {% if not selectedtypes or "rgb" in selectedtypes %}checked{% endif %}
+                name="selectedTypes[]" value="rgb"></td>
+            <td><input type="checkbox" {% if not selectedtypes or "leafarea" in selectedtypes %}checked{% endif %}
+                name="selectedTypes[]" value="leafarea"></td>
+            <td><input type="checkbox" {% if not selectedtypes or "weathercondition" in selectedtypes %}checked{% endif
+                %} name="selectedTypes[]" value="weathercondition"></td>
+            <td><input type="checkbox" {% if not selectedtypes or "temperature" in selectedtypes %}checked{% endif %}
+                name="selectedTypes[]" value="temperature"></td>
+            <td><input type="checkbox" {% if not selectedtypes or "leafcount" in selectedtypes %}checked{% endif %}
+                name="selectedTypes[]" value="leafcount"></td>
+            <td><input type="checkbox" {% if not selectedtypes or "leafcircle" in selectedtypes %}checked{% endif %}
+                name="selectedTypes[]" value="leafcircle"></td>
+            <td><input type="checkbox" {% if not selectedtypes or "leafsolid" in selectedtypes %}checked{% endif %}
+                name="selectedTypes[]" value="leafsolid"></td>
+            <td><input type="checkbox" {% if not selectedtypes or "leafratio" in selectedtypes %}checked{% endif %}
+                name="selectedTypes[]" value="leafratio"></td>
+          </tr>
+        </table>
+				<input type="hidden" name="initial_view" value="{{ initial_view }}">
+				<div style="text-align: center;">
+					<button type="submit" class="btn btn-primary" name="filter">
+						Filter
+					</button>
+					<button type="submit" class="btn btn-primary" name="download">
+						Download Images of Row Data
+					</button>
+				</div>
+        <table>
+          <tr>
+            <th>ID</th>
+            <th>Date Created</th>
+            <th>Data Types</th>
+            <th>Plant Report Entry ID</th>
+          </tr>
+          {% set i = namespace(value=0) %} {% for entry in entries %}
+          <tr>
+            <td>
+              <form class="col-auto text-center" method="post">
+								<input type="hidden" name="initial_view" value="{{ initial_view }}">
+                <button name="art_id" value="{{entry[0]}}" type="submit" class="btn btn-primary">
+                  {{ entry[0] }}
+                </button>
+              </form>
+            </td>
+            <td>{{ entry[3] }}</td>
+            <td>{{ entry[4] }}</td>
+            <td>{{ pEntries[i.value] }}</td>
+          </tr>
+          {% set i.value = i.value + 1 %} {% endfor %}
+        </table>
+      </form>
+      {% endif %}
+  </main>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+</body>
+
+{% endblock content %}

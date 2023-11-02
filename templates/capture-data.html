@@ -1,0 +1,198 @@
+{% extends 'layout.html' %} {% block content %}
+
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <title>Collect Data</title>
+  <style>
+    .menu {
+      background: #d0c4c6;
+      width: 100%;
+      height: auto;
+      padding-left: 20px;
+    }
+
+    .row {
+      margin-left: auto;
+      margin-right: auto;
+      width: 50%;
+      margin-bottom: 20px;
+      align-self: center;
+      justify-self: auto;
+      display: inline-flexbox;
+    }
+
+    .card {
+      margin-left: auto;
+      margin-right: auto;
+      width: 60%;
+      margin-bottom: 20px;
+      align-self: center;
+      justify-self: auto;
+    }
+
+    .btn-primary {
+      background-color: #d0c4c6;
+      border: none;
+      text-align: center;
+      color: black;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      cursor: pointer;
+    }
+
+    .btn-primary:hover {
+      background-color: #303824;
+      color: white;
+    }
+
+    .overlay-loading {
+      position: fixed;
+      top: 3em;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0.7);
+      transition: opacity 500ms;
+      z-index: 1000;
+    }
+
+    .overlay-loading:target {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .popup {
+      margin: 70px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 5px;
+      width: 30%;
+      position: relative;
+      transition: all 5s ease-in-out;
+      text-align: center;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .popupError {
+      height: 100px;
+    }
+
+    .popup h2 {
+      margin-top: 0;
+      color: #333;
+      font-family: "Montserrat", sans-serif;
+    }
+
+    .popup .close {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      transition: all 200ms;
+      font-size: 30px;
+      font-weight: bold;
+      text-decoration: none;
+      color: #333;
+    }
+
+    .popup .close:hover {
+      color: #06d85f;
+    }
+
+    .popup .content {
+      max-height: 30%;
+      overflow: auto;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="menu text-left">
+    <h1>CAPTURE DATA</h1>
+  </div>
+  <main>
+    <form class="row gx-3 gy-2 align-items-center" method="POST">
+      <div class="col-auto">
+        <select class="form-select" id="plantid" name="plantid">
+          {%if plantID==0%}
+          <option selected>Choose Plant...</option>
+          {% for plant in plants %}
+          <option value="{{plant[0]}}">{{plant[0]}} {{plant[1]}}</option>
+          {% endfor %} {%else%} {% for plant in plants %} {% if
+          plant[0]==plantID %}
+          <option selected value="{{plant[0]}}">
+            {{plant[0]}} {{plant[1]}}
+          </option>
+          {% endif %} {% endfor %} {% for plant in plants %}
+          <option value="{{plant[0]}}">{{plant[0]}} {{plant[1]}}</option>
+          {% endfor %} {%endif%}
+        </select>
+      </div>
+      <div class="col-auto">
+        <button type="submit" onclick="showLoading()" class="btn btn-primary">
+          Capture
+        </button>
+      </div>
+    </form>
+
+    {% if plantID!=0 %}
+    <div class="row gx-3 gy-2 align-items-center">
+      <div class="col-md-6">
+        <div class="card" style="width: 18rem">
+          <div class="card-body">
+            <img class="card-img-top" id="org_img" src="{{url}}" />
+          </div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">PlantID: {{data[1]}}</li>
+            <li class="list-group-item">Species: {{data[8]}}</li>
+            <li class="list-group-item">Date&Time: {{data[2]}}</li>
+            <li class="list-group-item">X/Y: {{data[9]}} / {{data[10]}}</li>
+            <li class="list-group-item">Leaf Area: {{data[6]}} cm2</li>
+            <li class="list-group-item">
+              RGB: {{'%.0f' %data[3]}}, {{'%.0f' %data[4]}},
+              {{'%.0f' %data[5]}}
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card" style="width: 18rem">
+          <div class="card-body">
+            <h5 class="card-title">Weather Data</h5>
+          </div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">Location: {{weather[2]}}</li>
+            <li class="list-group-item">Date&Time: {{weather[1]}}</li>
+            <li class="list-group-item">Condition: {{weather[3]}}</li>
+            <li class="list-group-item">Temperature: {{weather[4]}}°c</li>
+            <li class="list-group-item">Humidity: {{weather[5]}}%</li>
+            <li class="list-group-item">Wind Speed: {{weather[6]}} km/h</li>
+            <li class="list-group-item">Precipitation: {{weather[7]}}mm</li>
+            <li class="list-group-item">Cloud cover: {{weather[8]}}%</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    <script>
+      function showLoading() {
+        document.getElementById("loadingPopUp").style.display = "block";
+      }
+    </script>
+
+    <div class="overlay-loading" style="display: none" id="loadingPopUp">
+      <div class="popup">
+        <h2>
+          Capturing Data
+          <i style="margin-left: 3px" class="fa fa-spinner fa-spin"></i>
+        </h2>
+        <div class="content">This process could take a few minutes</div>
+      </div>
+    </div>
+  </main>
+</body>
+
+{% endblock content %}

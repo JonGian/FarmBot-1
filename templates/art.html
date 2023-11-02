@@ -1,0 +1,337 @@
+{% extends 'layout.html' %} {% block content %}
+
+<head>
+    <meta charset="utf-8">
+    <!-- Fontawesome cdn Link-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .menu {
+            background: #d0c4c6;
+            width: 100%;
+            height: auto;
+            padding-left: 20px;
+        }
+
+        table {
+            font-family: Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            margin-left: auto;
+            margin-right: auto;
+            width: 80%;
+            margin-bottom: 20px;
+        }
+
+        th {
+            background-color: #d0c4c6;
+            color: black;
+        }
+
+        td,
+        th {
+            /* border: 1px solid black; */
+            border-radius: 10px;
+            height: auto;
+            width: auto;
+            text-align: center;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:nth-child(odd) {
+            background-color: #ffffff;
+        }
+
+        .row {
+            margin-left: auto;
+            margin-right: auto;
+            width: 50%;
+            margin-bottom: 20px;
+            align-self: center;
+            justify-self: auto;
+            display: inline-flexbox;
+        }
+
+        .card {
+            margin-left: auto;
+            margin-right: auto;
+            width: 60%;
+            margin-bottom: 20px;
+            align-self: center;
+            justify-self: auto;
+            display: block;
+        }
+
+        .btn-primary {
+            background-color: #d0c4c6;
+            border: none;
+            padding: 15px 32px;
+            text-align: center;
+            color: black;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            background-color: #303824;
+            color: white;
+        }
+
+        td img {
+            width: 30%;
+            height: auto;
+        }
+
+        input[type="text"] {
+            margin: auto;
+            width: 50%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        /* 
+        #formBack {
+            padding: 10em;
+            background-color: white;
+            outline: 2px;
+            outline-color: #d0c4c6;
+            border: groove;
+            border-radius: 4em;
+            margin-left: auto;
+            margin-right: auto;
+            width: 80%;
+            margin-bottom: 20px;
+        } */
+
+        .overlay-loading {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.7);
+            transition: opacity 500ms;
+            z-index: 1000;
+        }
+
+        .overlay-loading:target {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .popup {
+            margin: 70px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 5px;
+            width: 30%;
+            position: relative;
+            transition: all 5s ease-in-out;
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .popupError {
+            height: 100px;
+        }
+
+        .popup h2 {
+            margin-top: 0;
+            color: #333;
+            font-family: "Montserrat", sans-serif;
+        }
+
+        .popup .close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            transition: all 200ms;
+            font-size: 30px;
+            font-weight: bold;
+            text-decoration: none;
+            color: #333;
+        }
+
+        .popup .close:hover {
+            color: #06d85f;
+        }
+
+        .popup .content {
+            max-height: 30%;
+            overflow: auto;
+        }
+
+        p {
+            display: block;
+            text-align: center;
+        }
+
+        #p {
+            text-align: center;
+        }
+
+        #center-text {
+            width: 100%;
+        }
+
+        #prompt {
+            text-align: center;
+        }
+
+        #colour {
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="menu text-left">
+        <h1>GENERATE ART</h1>
+    </div>
+    <main>
+        <form method="post">
+            <div id="center-text">
+                <strong>
+                    <p>
+                        Pick the data types to be used in the art generation:
+                    </p>
+                </strong>
+            </div>
+            <table id="data_options">
+                <tr>
+                    <th>Date & Time</th>
+                    <th>Species</th>
+                    <th>RGB</th>
+                    <th>Leaf Area</th>
+                    <th>Weather Condition</th>
+                    <th>Temperature</th>
+                    <th>Leaf Count</th>
+                    <th>Leaf Circularity</th>
+                    <th>Leaf Solidarity</th>
+                    <th>Leaf Aspect Ratio</th>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" {% if not selectedtypes or "datetime" in selectedtypes %}checked{% endif
+                            %} name="selectedTypes[]" value="datetime"></td>
+                    <td><input type="checkbox" {% if not selectedtypes or "species" in selectedtypes %}checked{% endif
+                            %} name="selectedTypes[]" value="species"></td>
+                    <td><input type="checkbox" {% if not selectedtypes or "rgb" in selectedtypes %}checked{% endif %}
+                            name="selectedTypes[]" value="rgb"></td>
+                    <td><input type="checkbox" {% if not selectedtypes or "leafarea" in selectedtypes %}checked{% endif
+                            %} name="selectedTypes[]" value="leafarea"></td>
+                    <td><input type="checkbox" {% if not selectedtypes or "weathercondition" in selectedtypes
+                            %}checked{% endif %} name="selectedTypes[]" value="weathercondition"></td>
+                    <td><input type="checkbox" {% if not selectedtypes or "temperature" in selectedtypes %}checked{%
+                            endif %} name="selectedTypes[]" value="temperature"></td>
+                    <td><input type="checkbox" {% if not selectedtypes or "leafcount" in selectedtypes %}checked{% endif
+                            %} name="selectedTypes[]" value="leafcount"></td>
+                    <td><input type="checkbox" {% if not selectedtypes or "leafcircle" in selectedtypes %}checked{%
+                            endif %} name="selectedTypes[]" value="leafcircle"></td>
+                    <td><input type="checkbox" {% if not selectedtypes or "leafsolid" in selectedtypes %}checked{% endif
+                            %} name="selectedTypes[]" value="leafsolid"></td>
+                    <td><input type="checkbox" {% if not selectedtypes or "leafratio" in selectedtypes %}checked{% endif
+                            %} name="selectedTypes[]" value="leafratio"></td>
+                </tr>
+            </table>
+
+            <div id="center-text">
+                <strong>
+                    <p>
+                        Selected data row:
+                    </p>
+                </strong>
+            </div>
+
+            <table>
+                <tr>
+                    <th>ID</th>
+                    <th>Date & Time</th>
+                    <th>Species</th>
+                    <th>RGB</th>
+                    <th>Leaf Area</th>
+                    <th>Weather Condition</th>
+                    <th>Temperature</th>
+                    <th>Leaf Count</th>
+                    <th>Leaf Circularity</th>
+                    <th>Leaf Solidarity</th>
+                    <th>Leaf Aspect Ratio</th>
+                </tr>
+                {% set i = namespace(value=0) %} {% for entry in entries %}
+                <tr>
+                    <td>{{ entry[0] }}</td>
+                    <td>{{ entry[2] }}</td>
+                    <td>{{ entry[12] }}</td>
+                    <td>
+                        {{ '%.0f' % entry[3] }}, {{ '%.0f' % entry[4] }}, {{ '%.0f' % entry[5] }}
+                    </td>
+                    <td>{{ entry[6] }}cm2</td>
+                    <td>{{ entry[13] }}</td>
+                    <td>{{ entry[14] }}°C</td>
+                    <td>{{ entry[8] }}</td>
+                    <td>{{ '%.2f' % (entry[9] * 100) }}%</td>
+                    <td>{{ '%.2f' % (entry[10] * 100) }}%</td>
+                    <td>{{ '%.2f' % entry[11] }}</td>
+                </tr>
+                {% set i.value = i.value + 1 %} {% endfor %}
+            </table>
+
+            <div id="formBack" style="text-align: center;">
+                {% if artpath %}
+                <img src="{{ artpath }}" width="512" height="512">
+                {% endif %}
+            </div>
+
+            <div id="center-text" align="center">
+                <label id="p" for="prompt">Additional Positive Prompt (Things you want):</label><br>
+                <div align="center">
+                    <input type="text" id="prompt" name="posPrompt" value="{{ posPrompt }}"
+                        placeholder="abstract art, monotone" />
+                </div>
+            </div>
+            <div id="center-text" align="center">
+                <label id="p" for="prompt">Additional Negative Prompt (Things you don't want):</label><br>
+                <div align="center">
+                    <input type="text" id="prompt" name="negPrompt" value="{{ negPrompt }}"
+                        placeholder="blurry, lowres" />
+                </div>
+            </div>
+            <div id="center-text" align="center">
+                {% if final_prompt %}
+                <label id="p" for="prompt">Prompt fed to AI:</label><br>
+                    <p>"{{ final_prompt }}"</p>
+                {% endif %}
+            </div>
+            <div class="row">
+                <button type="submit" class="btn btn-primary" onclick="showLoading()" name="art">
+                    Generate AI Art
+                </button>
+            </div>
+        </form>
+
+        <script>
+            function showLoading() {
+                document.getElementById("loadingPopUp").style.display = "block";
+            }
+        </script>
+
+        <div class="overlay-loading" style="display: none" id="loadingPopUp">
+            <div class="popup">
+                <h2>
+                    Generating Art
+                    <i style="margin-left: 3px" class="fa fa-spinner fa-spin"></i>
+                </h2>
+                <div class="content">This process could take a few minutes</div>
+            </div>
+        </div>
+    </main>
+</body>
+
+{% endblock content %}

@@ -1,0 +1,206 @@
+{% extends 'layout.html' %} {% block content %}
+
+<head>
+    <meta charset="utf-8">
+    <!-- Fontawesome cdn Link-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        .menu {
+            background: #d0c4c6;
+            width: 100%;
+            height: auto;
+            padding-left: 20px;
+        }
+
+        table {
+            font-family: Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            margin-left: auto;
+            margin-right: auto;
+            width: 80%;
+            margin-bottom: 20px;
+        }
+
+        th {
+            background-color: #d0c4c6;
+            color: black;
+        }
+
+        td,
+        th {
+            /* border: 1px solid black; */
+            border-radius: 10px;
+            height: auto;
+            width: auto;
+            text-align: center;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:nth-child(odd) {
+            background-color: #ffffff;
+        }
+
+        .row {
+            margin-left: auto;
+            margin-right: auto;
+            width: 50%;
+            margin-bottom: 20px;
+            align-self: center;
+            justify-self: auto;
+            display: inline-flexbox;
+        }
+
+        .card {
+            margin-left: auto;
+            margin-right: auto;
+            width: 60%;
+            margin-bottom: 20px;
+            align-self: center;
+            justify-self: auto;
+            display: block;
+        }
+
+        .btn-primary {
+            background-color: #d0c4c6;
+            border: none;
+            padding: 15px 32px;
+            text-align: center;
+            color: black;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            background-color: #303824;
+            color: white;
+        }
+
+        td img {
+            width: 30%;
+            height: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="menu text-left">
+        <h1>PLANT REPORT</h1>
+    </div>
+
+    <main>
+        <form class="row gx-3 gy-2 align-items-center" method="POST">
+            <div class="col-auto">
+                <select class="form-select" id="plantid" name="plantid">
+                    <option selected value="-1">Show All...</option>
+                    {% for plant in plants %}
+                    <option value="{{plant[0]}}">{{plant[0]}} | {{plant[1]}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-auto form-floating">
+                <input type="date" class="form-control" id="startdate" name="startdate" onblur="checkDate()" />
+                <label for="startdate">Input start date</label>
+            </div>
+            <div class="col-auto form-floating">
+                <input type="date" class="form-control" id="endate" name="enddate" onblur="checkDate()" />
+                <label for="endate">Input end date</label>
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary" name="display" value="False">
+                    Show Data
+                </button>
+
+                <button type="submit" class="btn btn-primary" name="display" value="True">
+                    Show Data and Photos
+                </button>
+
+                <button type="submit" class="btn btn-primary" name="export" value="True">
+                    Export Report
+                </button>
+            </div>
+        </form>
+        {% if plantID!=0 %}
+        <form method="POST">
+            <div class="row">
+                <button type="submit" class="btn btn-primary" name="art" value="True">
+                    Generate AI Art
+                </button>
+            </div>
+            <table id="plants">
+                <tr>
+                    <th>ID</th>
+                    <th>Date & Time</th>
+                    <th>Species</th>
+                    <th>RGB</th>
+                    <th>Leaf Area</th>
+                    <th>Weather Condition</th>
+                    <th>Temperature</th>
+                    <th>Leaf Count</th>
+                    <th>Leaf Circularity</th>
+                    <th>Leaf Solidarity</th>
+                    <th>Leaf Aspect Ratio</th>
+                    {% if photo == "True" %}
+                    <th>Original Photo</th>
+                    <th>Green Detection</th>
+                    <th>Object Detection</th>
+                    {% endif %}
+                    <th>Use in AI Art</th>
+                </tr>
+                {% set i = namespace(value=0) %} {% for entry in entries %}
+                <tr>
+                    <td>{{entry[0]}}</td>
+                    <td>{{entry[2]}}</td>
+                    <td>{{entry[12]}}</td>
+                    <td>
+                        {{'%.0f' %entry[3]}}, {{'%.0f' %entry[4]}}, {{'%.0f' %entry[5]}}
+                    </td>
+                    <td>{{entry[6]}}cm2</td>
+                    <td>{{entry[13]}}</td>
+                    <td>{{entry[14]}}°C</td>
+                    <td>{{entry[8]}}</td>
+                    <td>{{'%.2f' % (entry[9] * 100)}}%</td>
+                    <td>{{'%.2f' % (entry[10] * 100)}}%</td>
+                    <td>{{'%.2f' % (entry[11])}}</td>
+                    {% if photo == "True" %}
+                    <td><img src="{{url[i.value][0]}}" /></td>
+                    <td><img src="{{url[i.value][1]}}" /></td>
+                    {% if url[i.value][2] != "Unavailable" %}
+                    <td><img src="{{url[i.value][2]}}" /></td>
+                    {% else %}
+                    <td>*{{url[i.value][2]}}*</td>
+                    {% endif %}
+                    {%endif%}
+                    <td>
+                        <input type="checkbox" value="{{entry[0]}}" name="selectedPlant[]">
+                    </td>
+                </tr>
+                {% set i.value = i.value + 1 %} {% endfor %}
+            </table>
+        </form>
+        {% endif %}
+    </main>
+
+    <script>
+        function checkDate() {
+            var start = document.getElementById("startdate").value;
+            var end = document.getElementById("endate").value;
+
+            if ((Date.parse(start) >= Date.parse(end))) {
+                toastr.error("Start Date must be before End Date!");
+            }
+        }
+    </script>
+</body>
+
+{% endblock content %}
