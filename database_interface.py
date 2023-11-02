@@ -891,13 +891,13 @@ class Database:
         connection.commit()
         connection.close()
 
-    def save_ai_filepath(self, user_prompt, posPrompt, negPrompt, filepath, datatypes):
+    def save_ai_filepath(self, user_prompt, posPrompt, negPrompt, filepath, datatypes, seed):
         connection = sqlite3.connect("database.db")
         cursor = connection.cursor()
-        sql = "INSERT INTO aiArt (artPrompt, artPosPrompt, artNegPrompt, artFilePath, artDate, artDataTypes) VALUES (?, ?, ?, ?, ?, ?)"
+        sql = "INSERT INTO aiArt (artPrompt, artPosPrompt, artNegPrompt, artFilePath, artDate, artDataTypes, seed) VALUES (?, ?, ?, ?, ?, ?, ?)"
         tz = timezone("Australia/Sydney")
         now = datetime.now(tz).today().strftime("%Y-%m-%d %H:%M:%S")
-        cursor.execute(sql, (user_prompt, posPrompt, negPrompt, filepath, now, ', '.join(datatypes)))
+        cursor.execute(sql, (user_prompt, posPrompt, negPrompt, filepath, now, ', '.join(datatypes), seed))
         id = cursor.lastrowid
         connection.commit()
         connection.close()

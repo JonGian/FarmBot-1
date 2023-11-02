@@ -306,7 +306,13 @@
             <div id="center-text" align="center">
                 {% if final_prompt %}
                 <label id="p" for="prompt">Prompt fed to AI:</label><br>
-                    <p>"{{ final_prompt }}"</p>
+                <p>"{{ final_prompt }}"</p>
+                {% endif %}
+            </div>
+            <div id="center-text" align="center">
+                {% if seed %}
+                <label id="p" for="prompt">Image seed:</label><br>
+                <p>"{{ seed }}"</p>
                 {% endif %}
             </div>
             <div class="row">

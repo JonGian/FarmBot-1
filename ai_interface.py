@@ -84,6 +84,8 @@ class AI:
 
         print(f"Final prompt is {final_prompt}")
         print(f"Final negative prompt is {final_neg_prompt}")
+        
+        seed = torch.seed()
 
         pipe.to("cuda")  # if cuda is available
 
@@ -93,7 +95,7 @@ class AI:
 
         image.save(img_path)
 
-        return (img_path, final_prompt)
+        return (img_path, final_prompt, seed)
     
     def estimate_colour_text(self, colour):
         try:

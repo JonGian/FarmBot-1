@@ -91,6 +91,7 @@ CREATE TABLE IF NOT EXISTS plantGroups (
         FOREIGN KEY(userEmail) REFERENCES users(emailAddress)
 );
 
+
 CREATE TABLE IF NOT EXISTS aiArt (
         artID INTEGER PRIMARY KEY AUTOINCREMENT,
         artPrompt TEXT,
@@ -98,7 +99,8 @@ CREATE TABLE IF NOT EXISTS aiArt (
         artNegPrompt TEXT,
         artFilePath TEXT,
         artDate datetime,
-        artDataTypes TEXT
+        artDataTypes TEXT,
+        seed BIGINT
 );
 
 CREATE TABLE IF NOT EXISTS aiart_to_entry (

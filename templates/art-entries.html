@@ -107,9 +107,9 @@
       box-sizing: border-box;
     }
 
-		#center-text {
-			text-align: center;
-		}
+    #center-text {
+      text-align: center;
+    }
   </style>
 </head>
 
@@ -129,6 +129,7 @@
           <th>Negative Prompt</th>
           <th>Data Types</th>
           <th>Plant Report Entry ID</th>
+          <th>Image seed</th>
           <th>Image</th>
         </tr>
         <tr>
@@ -139,18 +140,19 @@
           <td>{{ entries[6] }}</td>
           <td>{{ entries[4] }}</td>
           <td>{{ pEntries }}</td>
+          <td>{{ entries[7] }}</td>
           <td><img src="{{ entries[2] }}"></td>
         </tr>
       </table>
 
       {% else %}
-			<div id="center-text">
-				<strong>
-					<p>
-						Filter by Data Types:
-					</p>
-				</strong>
-			</div>
+      <div id="center-text">
+        <strong>
+          <p>
+            Filter by Data Types:
+          </p>
+        </strong>
+      </div>
       <form class="row gx-3 gy-2 align-items-center" name="arts" method="POST">
         <table id="data_options">
           <tr>
@@ -188,15 +190,15 @@
                 name="selectedTypes[]" value="leafratio"></td>
           </tr>
         </table>
-				<input type="hidden" name="initial_view" value="{{ initial_view }}">
-				<div style="text-align: center;">
-					<button type="submit" class="btn btn-primary" name="filter">
-						Filter
-					</button>
-					<button type="submit" class="btn btn-primary" name="download">
-						Download Images of Row Data
-					</button>
-				</div>
+        <input type="hidden" name="initial_view" value="{{ initial_view }}">
+        <div style="text-align: center;">
+          <button type="submit" class="btn btn-primary" name="filter">
+            Filter
+          </button>
+          <button type="submit" class="btn btn-primary" name="download">
+            Download Images of Row Data
+          </button>
+        </div>
         <table>
           <tr>
             <th>ID</th>
@@ -208,7 +210,7 @@
           <tr>
             <td>
               <form class="col-auto text-center" method="post">
-								<input type="hidden" name="initial_view" value="{{ initial_view }}">
+                <input type="hidden" name="initial_view" value="{{ initial_view }}">
                 <button name="art_id" value="{{entry[0]}}" type="submit" class="btn btn-primary">
                   {{ entry[0] }}
                 </button>
