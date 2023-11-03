@@ -304,6 +304,12 @@
                 </div>
             </div>
             <div id="center-text" align="center">
+                <label id="p" for="prompt">Seed (If applicable):</label><br>
+                <div align="center">
+                    <input type="text" id="prompt" name="imgSeed" value="{{ imgSeed }}" />
+                </div>
+            </div>
+            <div id="center-text" align="center">
                 {% if final_prompt %}
                 <label id="p" for="prompt">Prompt fed to AI:</label><br>
                 <p>"{{ final_prompt }}"</p>

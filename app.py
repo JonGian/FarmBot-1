@@ -850,13 +850,15 @@ def art():
 
         posPrompt = request.form["posPrompt"]
         negPrompt = request.form["negPrompt"]
+        img_seed = request.form["imgSeed"]
+        print("input from html: ", img_seed)
+        print(type(img_seed))
 
         user_prompt = posPrompt + ":" + negPrompt
 
         artpath, final_prompt, seed = ai.generate_art(
-            user_prompt, entries, selectedDataTypes, database
+            user_prompt, entries, selectedDataTypes, database, img_seed
         )
-        print("seed:", seed)
         id = database.save_ai_filepath(final_prompt, posPrompt, negPrompt, artpath, selectedDataTypes, seed)
 
         for i in entries:

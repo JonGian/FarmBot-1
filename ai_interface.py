@@ -9,7 +9,7 @@ class AI:
     # hardcoded negative prompt (things you don't want)
     NEG_PROMPT = "photo of plant"
 
-    def generate_art(self, user_prompt: str, entry_ids: list, data_types: list, db: Database):
+    def generate_art(self, user_prompt: str, entry_ids: list, data_types: list, db: Database, img_seed: str):
         img_name = str(uuid.uuid4()) + ".jpg"
         img_path = "./ai_images" + os.sep + img_name
 
@@ -85,7 +85,25 @@ class AI:
         print(f"Final prompt is {final_prompt}")
         print(f"Final negative prompt is {final_neg_prompt}")
         
-        seed = torch.seed()
+        original_seed = torch.seed()
+
+        print("original_seed : ", original_seed)
+
+        # if img_seed != "":
+        #     torch.manual_seed(int(img_seed))
+        # print("seed after: ", seed)
+
+                
+        if img_seed != "":
+            # Set the seed to the value from img_seed
+            new_seed = int(img_seed)
+            torch.manual_seed(new_seed)
+            print("Manual seed: ", new_seed)
+            # Now, capture the updated seed
+            updated_seed = torch.seed()
+            print("Updated seed: ", updated_seed)
+        else:
+            print("img_seed is empty")
 
         pipe.to("cuda")  # if cuda is available
 
@@ -95,7 +113,7 @@ class AI:
 
         image.save(img_path)
 
-        return (img_path, final_prompt, seed)
+        return (img_path, final_prompt, original_seed)
     
     def estimate_colour_text(self, colour):
         try:
