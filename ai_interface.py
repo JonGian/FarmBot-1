@@ -84,30 +84,24 @@ class AI:
 
         print(f"Final prompt is {final_prompt}")
         print(f"Final negative prompt is {final_neg_prompt}")
-        
+        pipe.to("cuda")  # if cuda is available
         original_seed = torch.seed()
-
+        generator = torch.Generator(device='cuda')
         print("original_seed : ", original_seed)
 
-        # if img_seed != "":
-        #     torch.manual_seed(int(img_seed))
-        # print("seed after: ", seed)
-
-                
         if img_seed != "":
             # Set the seed to the value from img_seed
             new_seed = int(img_seed)
             torch.manual_seed(new_seed)
+            generator = generator.manual_seed(new_seed)
             print("Manual seed: ", new_seed)
             # Now, capture the updated seed
             updated_seed = torch.seed()
             print("Updated seed: ", updated_seed)
+            image = pipe(prompt=final_prompt, negative_prompt=final_neg_prompt, generator=generator).images[0]
         else:
             print("img_seed is empty")
-
-        pipe.to("cuda")  # if cuda is available
-
-        image = pipe(prompt=final_prompt, negative_prompt=final_neg_prompt).images[0]
+            image = pipe(prompt=final_prompt, negative_prompt=final_neg_prompt).images[0]
 
         torch.cuda.empty_cache()
 
