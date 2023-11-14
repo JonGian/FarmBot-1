@@ -174,7 +174,16 @@ class plantcv_interface:
             center_x = pic_width // 2
             center_y = pic_height // 2
 
-            b, g, r = img[center_y, center_x]
+            roi_size = 10  # Size of the square region of interest in pixels
+
+            # Define the region of interest
+            roi_x = max(0, center_x - roi_size // 2)
+            roi_y = max(0, center_y - roi_size // 2)
+            roi_w = min(pic_width, center_x + roi_size // 2)
+            roi_h = min(pic_height, center_y + roi_size // 2)
+
+            # Extract the RGB values from the region of interest
+            b, g, r = img[roi_y:roi_h, roi_x:roi_w].mean(axis=(0, 1))
 
             color = {
                 "r" : int(r),
