@@ -859,7 +859,7 @@ def art():
         artpath, final_prompt, seed = ai.generate_art(
             user_prompt, entries, selectedDataTypes, database, img_seed
         )
-        id = database.save_ai_filepath(final_prompt, posPrompt, negPrompt, artpath, selectedDataTypes, seed)
+        id = database.save_ai_filepath(final_prompt, posPrompt, negPrompt, artpath, selectedDataTypes, str(seed))
 
         for i in entries:
             database.link_aiart_to_entry(id, i[0])
