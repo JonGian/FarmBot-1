@@ -100,7 +100,7 @@ CREATE TABLE IF NOT EXISTS aiArt (
         artFilePath TEXT,
         artDate datetime,
         artDataTypes TEXT,
-        seed BIGINT
+        seed TEXT
 );
 
 CREATE TABLE IF NOT EXISTS aiart_to_entry (
