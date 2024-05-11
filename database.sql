@@ -110,3 +110,8 @@ CREATE TABLE IF NOT EXISTS aiart_to_entry (
         FOREIGN KEY (artID) REFERENCES aiArt(artID),
         FOREIGN KEY (entryID) REFERENCES plantEntries(entryID)
 );
+
+-- ALTER TABLE schedules ADD scheduleEndDate datetime;
+-- UPDATE schedules 
+-- SET scheduleEndDate = "2024-12-12 03:00:00"
+-- WHERE scheduleEndDate IS NULL;

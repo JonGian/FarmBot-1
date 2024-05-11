@@ -19,7 +19,8 @@ class AI:
             torch_dtype=torch.float16,
             use_safetensors=True,
             variant="fp16",
-            custom_pipeline="lpw_stable_diffusion_xl",
+            custom_pipeline="lpw_stable_diffusion",
+            # custom_pipeline="lpw_stable_diffusion_xl",
         )
 
         entries_prompt = []

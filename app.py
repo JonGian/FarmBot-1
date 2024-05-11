@@ -163,6 +163,7 @@ def dashboard():
 
     # Refresh the database
     update_database(credentials[0])
+    print("db updated")
 
     # Grab the list of bots
     bot_list = database.get_farmbot(credentials[0])
